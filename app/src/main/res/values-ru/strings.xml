@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">НМедиа</string>
+    <string name="avatar">Пустой Аватар</string>
+    <string name="likes_amount">Количество лайков</string>
+    <string name="sharing_amount">Количество поделившихся</string>
+    <string name="views_amount">Количество просмотров</string>
+    <string name="menu">Открыть меню</string>
+    <string name="author">Нетология: Университет интернет-профессий будущего</string>
+    <string name="published">21 мая в 18:40</string>
+    <string name="content">Привет, это новая Нетология! Когда-то Нетология начиналась с интенсивов по онлайн-маркетингу. Затем появились курсы по дизайну, разработке, аналитике и управлению. Мы растём сами и помогаем расти студентам: от новичков до уверенных профессионалов. Но самое важное остаётся с нами: мы верим, что в каждом уже есть сила, которая заставляет хотеть больше, целиться выше, бежать быстрее. Наша миссия — помочь встать на путь роста и начать цепочку перемен – http://netolo.gy/fyb</string>
+    <string name="menu_remove">Удалить</string>
+    <string name="menu_edit">Изменить</string>
+    <string name="chooser_share_post">Поделиться</string>
+    <string name="video_description">Описание к видео. Приложение NMEDIA</string>
+    <string name="videoView">8353 просмотра</string>
+    <string name="google_play_unavailable">Google Api Недоступно</string>
+    <string name="notification_user_liked">%1$s поставил лайк посту %2$s</string>
+    <string name="channel_remote_name">Уведомления с сервера</string>
+    <string name="channel_remote_description">Уведомления с удалённого сервера</string>
+    <string name="error_empty_content">Контент не может быть доступен</string>
+    <string name="internet_error">Ошибка сети</string>
+    <string name="retry_loadings">Перезагрузить</string>
+    <string name="empty_posts">Посты отсутствуют.\nПри создании нового поста он отобразится здесь</string>
+    <string name="error_loading">Что-то пошло не так... Попробуйте позже</string>
+    <string name="save">Сохранить</string>
+
+</resources>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/postCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/common_spacing"
+    tools:context=".activity.FeedFragment">
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/author"
+        app:layout_constraintBottom_toTopOf="@+id/published"
+        app:layout_constraintEnd_toStartOf="@id/menu"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar" />
+
+    <TextView
+        android:id="@+id/published"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_spacing"
+        android:text="@string/published"
+        app:layout_constraintBottom_toBottomOf="@+id/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/avatar"
+        app:layout_constraintTop_toBottomOf="@+id/author" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/avatar_dimens"
+        android:layout_height="@dimen/avatar_dimens"
+        android:contentDescription="@string/avatar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/menu"
+        style="@style/Widget.AppTheme.Buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/menu"
+        android:elevation="2dp"
+        app:icon="@drawable/menu_icon"
+        app:layout_constraintBottom_toBottomOf="@id/author"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/author"
+        app:layout_constraintTop_toTopOf="@id/author" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/topBarrier"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="published,avatar" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:autoLink="web"
+        android:paddingBottom="@dimen/common_spacing"
+        android:text="@string/content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBarrier" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/videoImage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:background="@color/project_blue"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/video_image"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/content" />-->
+
+<!--    <ImageButton-->
+<!--        android:id="@+id/playButton"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:scaleType="centerCrop"-->
+<!--        android:src="@drawable/play_btn2"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/videoImage"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/videoImage"-->
+<!--        app:layout_constraintStart_toStartOf="@id/videoImage"-->
+<!--        app:layout_constraintTop_toTopOf="@id/videoImage" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/videoDescriptionText"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:text="@string/video_description"-->
+<!--        android:textColor="@color/project_blue"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/videoImage" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/videoViews"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/videoView"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/videoDescriptionText" />-->
+
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/videoGroupViews"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:constraint_referenced_ids="videoImage,videoDescriptionText,videoViews, playButton" />-->
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/contentBarrier"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="content" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/likeIcon"
+        style="@style/Widget.AppTheme.Buttons"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:checkable="true"
+        android:contentDescription="@string/likes_amount"
+        android:elevation="2dp"
+        android:scaleType="fitCenter"
+        app:icon="@drawable/like_icon_"
+        app:iconGravity="start"
+        app:iconSize="@dimen/button_icon_size"
+        app:iconTint="@color/ic_like_selector"
+        app:iconTintMode="src_in"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/contentBarrier"
+        app:layout_goneMarginTop="@dimen/common_spacing" />
+
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/sharingIcon"-->
+<!--        style="@style/Widget.AppTheme.Buttons"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_marginStart="18dp"-->
+<!--        android:contentDescription="@string/sharing_amount"-->
+<!--        android:elevation="2dp"-->
+<!--        android:scaleType="fitCenter"-->
+<!--        app:icon="@drawable/share_icon"-->
+<!--        app:iconGravity="start"-->
+<!--        app:iconSize="@dimen/button_icon_size"-->
+<!--        app:iconTintMode="src_in"-->
+<!--        app:layout_constraintStart_toEndOf="@id/likeIcon"-->
+<!--        app:layout_constraintTop_toTopOf="@id/contentBarrier"-->
+<!--        app:layout_goneMarginTop="@dimen/common_spacing" />-->
+
+    <ImageView
+        android:id="@+id/viewsIcon"
+        android:layout_width="@dimen/icon_dimens"
+        android:layout_height="@dimen/icon_dimens"
+        android:layout_marginEnd="@dimen/space_inside_group"
+        android:contentDescription="@string/views_amount"
+        android:scaleType="fitCenter"
+        android:src="@drawable/views_icon"
+        app:layout_constraintBottom_toBottomOf="@id/postCard"
+        app:layout_constraintEnd_toStartOf="@id/viewsNumber"
+        app:layout_constraintTop_toTopOf="@id/contentBarrier"
+        app:layout_goneMarginTop="@dimen/common_spacing" />
+
+    <TextView
+        android:id="@+id/viewsNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/views"
+        android:textColor="@color/icon_colors"
+        app:layout_constraintBottom_toBottomOf="@id/postCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/contentBarrier"
+        app:layout_goneMarginTop="@dimen/common_spacing" />
+
+    <View
+        android:id="@+id/clickableView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="@id/postCard"
+        app:layout_constraintEnd_toEndOf="@id/postCard"
+        app:layout_constraintStart_toStartOf="@id/postCard"
+        app:layout_constraintTop_toTopOf="@id/postCard" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

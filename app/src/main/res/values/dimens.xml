@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_spacing">16dp</dimen>
+    <dimen name="avatar_dimens">48dp</dimen>
+    <dimen name="icon_dimens">24dp</dimen>
+    <dimen name="space_between_groups">24dp</dimen>
+    <dimen name="space_inside_group">10dp</dimen>
+    <dimen name="button_icon_size">24dp</dimen>
+    <dimen name="fab_dimens">28dp</dimen>
+    <dimen name="progress_bar_dims">44dp</dimen>
+</resources>

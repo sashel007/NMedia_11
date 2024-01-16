@@ -103,7 +103,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 post.copy(likes = post.likes + 1, likedByMe = true)
             }
 
-            // Обновляем список постов
+            // Оптимистично обновляем список постов
             val updatedPosts = currentPosts.map { post ->
                 if (post.id == id) updatedPost else post
             }
@@ -116,7 +116,7 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     repository.likePost(id)
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 // Если запрос не удался, откатываем изменения в UI
                 _data.postValue(FeedModel(posts = currentPosts))
                 val errorMessage = "Ошибка при нажатии кнопки \"Лайк\". Повторите снова"
@@ -139,6 +139,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: Exception) {
                 // Если запрос не удался, откатываем изменения в UI
                 _data.postValue(FeedModel(posts = oldPosts))
+                val errorMessage = "Ошибка при удалении. Повторите снова"
+                _errorMessages.postValue(errorMessage)
             }
         }
     }

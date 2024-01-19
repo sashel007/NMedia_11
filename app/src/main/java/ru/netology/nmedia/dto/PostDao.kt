@@ -18,6 +18,9 @@ interface PostDao {
     @Query("SELECT *  FROM PostEntity WHERE id = :id")
     fun getById(id: Long): LiveData<PostEntity>
 
+    @Query("SELECT * FROM PostEntity WHERE id = :id")
+    suspend fun getByIdSync(id: Long): PostEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: PostEntity)
 

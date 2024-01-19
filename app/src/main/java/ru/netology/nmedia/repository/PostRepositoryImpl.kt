@@ -2,19 +2,12 @@ package ru.netology.nmedia.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import ru.netology.nmedia.api.PostsApi
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.entity.PostEntity
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
 
@@ -63,16 +56,17 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override suspend fun likePost(id: Long): Post {
-        try {
+        dao.like(id)
+        return try {
             val response: Response<Post> = PostsApi.retrofitService.likePost(id)
             if (!response.isSuccessful) {
+                // В случае неудачи откатываем изменения в базе данных
+                dao.like(id)
                 throw ApiError(response.code(), response.message())
             }
             val likedPost: Post =
                 response.body() ?: throw ApiError(response.code(), response.message())
-            val likedPostEntity = PostEntity.toEntity(likedPost)
-            dao.like(likedPostEntity.id)
-            return likedPost
+            likedPost
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -81,16 +75,17 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override suspend fun unlikePost(id: Long): Post {
-        try {
+        dao.like(id)
+        return try {
             val response: Response<Post> = PostsApi.retrofitService.likePost(id)
             if (!response.isSuccessful) {
+                // В случае неудачи откатываем изменения в базе данных
+                dao.like(id)
                 throw ApiError(response.code(), response.message())
             }
             val likedPost: Post =
                 response.body() ?: throw ApiError(response.code(), response.message())
-            val likedPostEntity = PostEntity.toEntity(likedPost)
-            dao.like(likedPostEntity.id)
-            return likedPost
+            likedPost
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {
@@ -99,12 +94,16 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     }
 
     override suspend fun removeById(id: Long) {
+        // Получаем копию поста перед удалением
+        val postToDelete = dao.getByIdSync(id)
+        dao.removeById(id)
         try {
             val response = PostsApi.retrofitService.removeById(id)
             if (!response.isSuccessful) {
+                // Если запрос на сервере не удался, восстанавливаем пост в базе данных
+                postToDelete?.let { dao.insert(it) }
                 throw ApiError(response.code(), response.message())
             }
-            dao.removeById(id)
         } catch (e: IOException) {
             throw NetworkError
         } catch (e: Exception) {

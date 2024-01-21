@@ -29,7 +29,6 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
             }
             // Вставка списка объектов сущности в базу данных
             dao.insert(postListEntity)
-
             return body
         } catch (e: IOException) {
             throw NetworkError
@@ -68,8 +67,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 response.body() ?: throw ApiError(response.code(), response.message())
             likedPost
         } catch (e: IOException) {
+            dao.like(id)
             throw NetworkError
         } catch (e: Exception) {
+            dao.like(id)
             throw UnknownError
         }
     }
@@ -77,7 +78,7 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
     override suspend fun unlikePost(id: Long): Post {
         dao.like(id)
         return try {
-            val response: Response<Post> = PostsApi.retrofitService.likePost(id)
+            val response: Response<Post> = PostsApi.retrofitService.unlikePost(id)
             if (!response.isSuccessful) {
                 // В случае неудачи откатываем изменения в базе данных
                 dao.like(id)
@@ -87,8 +88,10 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 response.body() ?: throw ApiError(response.code(), response.message())
             likedPost
         } catch (e: IOException) {
+            dao.like(id)
             throw NetworkError
         } catch (e: Exception) {
+            dao.like(id)
             throw UnknownError
         }
     }
@@ -105,12 +108,13 @@ class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
                 throw ApiError(response.code(), response.message())
             }
         } catch (e: IOException) {
+            postToDelete?.let { dao.insert(it) }
             throw NetworkError
         } catch (e: Exception) {
+            postToDelete?.let { dao.insert(it) }
             throw UnknownError
         }
     }
-
 
     override suspend fun save(post: Post): Post {
         try {

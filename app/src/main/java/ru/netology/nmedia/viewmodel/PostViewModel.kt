@@ -96,19 +96,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         val currentPost = currentPosts.find { it.id == id }
 
         currentPost?.let { post ->
-            // Оптимистичное обновление UI
-            val updatedPost = if (post.likedByMe) {
-                post.copy(likes = post.likes - 1, likedByMe = false)
-            } else {
-                post.copy(likes = post.likes + 1, likedByMe = true)
-            }
-
-            // Оптимистично обновляем список постов
-            val updatedPosts = currentPosts.map { post ->
-                if (post.id == id) updatedPost else post
-            }
-            _data.postValue(FeedModel(posts = updatedPosts))
-
             // Асинхронное обновление на сервере
             try {
                 if (post.likedByMe) {
@@ -118,7 +105,6 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
                 }
             } catch (e: Throwable) {
                 // Если запрос не удался, откатываем изменения в UI
-                _data.postValue(FeedModel(posts = currentPosts))
                 val errorMessage = "Ошибка при нажатии кнопки \"Лайк\". Повторите снова"
                 _errorMessages.postValue(errorMessage)
             }
@@ -131,14 +117,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         // Оптимистичная модель: предполагаем, что пост удален
         val oldPosts = data.value?.posts.orEmpty()
         val updatedPosts = oldPosts.filter { it.id != id }
-        _data.postValue(_data.value?.copy(posts = updatedPosts))
 
         updatedPosts.let { posts ->
             try {
                 repository.removeById(id)
             } catch (e: Exception) {
-                // Если запрос не удался, откатываем изменения в UI
-                _data.postValue(FeedModel(posts = oldPosts))
                 val errorMessage = "Ошибка при удалении. Повторите снова"
                 _errorMessages.postValue(errorMessage)
             }
@@ -157,14 +140,15 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
 
         // Оптимистичное обновление: добавляем новый пост в UI
         val currentPosts = _data.value?.posts.orEmpty()
-        _data.postValue(_data.value?.copy(posts = listOf(newPost) + currentPosts))
 
         // Ассинхронное сохранение поста
         try {
             repository.save(newPost)
             val updatedPosts = listOf(newPost) + currentPosts.filter { it.id != 0L }
-            _data.postValue(_data.value?.copy(posts = updatedPosts))
 
+            _data.value?.posts?.map {
+                updatedPosts
+            }.orEmpty()
             // оповещение об успешном создании
             _postCreated.postValue(Unit)
             resetEditingState()
@@ -172,10 +156,11 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             // Скрываем индикатор загрузки
             _isLoading.postValue(false)
         } catch (e: Exception) {
-            // Если запрос не удался, откатываем изменения в UI
-            _data.postValue(_data.value?.copy(posts = currentPosts))
-            _isLoading.postValue(false)
+            // Обработка ошибок при обновлении
             _errorMessages.postValue("Повторите попытку")
+        } finally {
+            // Скрываем индикатор ожидания ответа от сервера
+            _isLoading.postValue(false)
         }
     }
 
@@ -192,10 +177,9 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             repository.save(updatedPost)
 
             // Обновляем список постов в LiveData
-            val updatedPosts = _data.value?.posts?.map { post ->
+            _data.value?.posts?.map { post ->
                 if (post.id == updatedPost.id) updatedPost else post
             }.orEmpty()
-            _data.postValue(_data.value?.copy(posts = updatedPosts))
 
             // Оповещаем о завершении обновления
             _postCreated.postValue(Unit)
